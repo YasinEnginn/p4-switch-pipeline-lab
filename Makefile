@@ -5,7 +5,7 @@ BUILD_DIR := build
 BMV2_JSON := $(BUILD_DIR)/switch.json
 P4INFO := $(BUILD_DIR)/switch.p4info.txtpb
 
-.PHONY: all compile test clean
+.PHONY: all compile test mininet-test mininet-cli clean
 
 all: compile
 
@@ -17,6 +17,13 @@ $(BMV2_JSON) $(P4INFO): $(SOURCE) $(wildcard p4src/include/*.p4)
 
 test: compile
 	bash tests/check_contract.sh
+	bash tests/check_mininet_layout.sh
+
+mininet-test:
+	bash scripts/run-mininet.sh --test
+
+mininet-cli:
+	bash scripts/run-mininet.sh --cli
 
 clean:
 	rm -f $(BMV2_JSON) $(P4INFO)

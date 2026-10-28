@@ -1,4 +1,5 @@
 /build/
+/artifacts/
 *.log
 *.pcap
 __pycache__/

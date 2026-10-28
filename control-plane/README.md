@@ -46,3 +46,11 @@ them from P4Info instead of hard-coding the values in a particular build.
 
 The text file in this directory uses BMv2's target-specific Thrift CLI because
 it is compact and easy to read. P4Runtime is the portable control-plane API.
+
+## Three-switch Mininet rules
+
+The `mininet/` subdirectory contains topology-specific rules for `s1`, `s2`,
+and `s3`. Unlike the standalone `bmv2-cli.txt` example, these files are loaded
+automatically by `mininet/lab.py` and provide complete bidirectional reachability
+between the three host subnets. See [`../mininet/README.md`](../mininet/README.md)
+for the port map and addressing plan.

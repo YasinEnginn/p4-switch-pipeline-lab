@@ -52,11 +52,20 @@ The detailed, ordered explanation is in
 │       └── deparser.p4          # packet serialization order
 ├── control-plane/
 │   ├── README.md                # how runtime rules relate to P4
-│   └── bmv2-cli.txt             # example BMv2 table entries
+│   ├── bmv2-cli.txt             # standalone BMv2 table examples
+│   └── mininet/                 # per-switch rules for s1, s2, s3
+├── mininet/
+│   ├── Dockerfile               # reproducible p4c + BMv2 + Mininet image
+│   ├── lab.py                   # three-host/three-switch topology and tests
+│   ├── udp_probe.py             # end-to-end EF-marked UDP validation
+│   └── README.md                # topology and operating guide
 ├── docs/
 │   └── pipeline-walkthrough.md  # packet journey, step by step
+├── scripts/
+│   └── run-mininet.sh           # one-command container runner
 ├── tests/
-│   └── check_contract.sh        # checks the generated P4Info surface
+│   ├── check_contract.sh        # checks the generated P4Info surface
+│   └── check_mininet_layout.sh  # validates lab files and route coverage
 ├── Makefile
 └── .github/workflows/ci.yml
 ```
@@ -114,6 +123,34 @@ simple_switch_CLI < control-plane/bmv2-cli.txt
 The interface names and port numbers are examples. See
 [`control-plane/README.md`](control-plane/README.md) before running the rules,
 especially for multicast setup and ECMP behavior.
+
+## Three-switch Mininet lab
+
+The repository also includes a reproducible routed topology:
+
+```text
+h1 (10.0.1.1) -- s1 -- s2 -- s3 -- h3 (10.0.3.3)
+                         |
+                    h2 (10.0.2.2)
+```
+
+Run the automated all-host ping and `h1`-to-`h3` UDP test with:
+
+```bash
+make mininet-test
+```
+
+Or open an interactive Mininet prompt:
+
+```bash
+make mininet-cli
+```
+
+Both commands build and run a privileged, disposable Docker container so the
+host does not need a passwordless `sudo` configuration. Logs, CLI output, test
+results, and packet captures are retained under `artifacts/mininet/`. See the
+[`mininet` lab guide](mininet/README.md) for the complete port map and addressing
+plan.
 
 ## What to read first
 

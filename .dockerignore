@@ -1,0 +1,7 @@
+.git
+.github
+artifacts
+build
+__pycache__
+*.log
+*.pcap

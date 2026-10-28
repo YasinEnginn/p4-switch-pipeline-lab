@@ -1,0 +1,6 @@
+# s2: h2 on port 1, s1 on port 2, s3 on port 3.
+table_add IngressPipeline.ipv4_lpm IngressPipeline.set_route 10.0.1.0/24 => 0x00aa00000102 0x00aa00000202 2
+table_add IngressPipeline.ipv4_lpm IngressPipeline.set_route 10.0.2.0/24 => 0x000000000202 0x00aa00000201 1
+table_add IngressPipeline.ipv4_lpm IngressPipeline.set_route 10.0.3.0/24 => 0x00aa00000302 0x00aa00000203 3
+
+table_add IngressPipeline.qos_classifier IngressPipeline.set_priority 0xb8&&&0xfc => 5 100
