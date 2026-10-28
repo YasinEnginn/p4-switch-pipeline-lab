@@ -1,0 +1,23 @@
+# Example entries for a three-port BMv2 lab switch.
+# Adapt ports and MAC addresses to your topology before use.
+
+# Deny TCP from 10.0.0.0/24 to host 10.0.0.99. The final value is priority.
+table_add IngressPipeline.ipv4_acl IngressPipeline.drop 10.0.0.0&&&255.255.255.0 10.0.0.99&&&255.255.255.255 6&&&255 => 100
+
+# Map DiffServ EF (DSCP 46, any ECN) to internal priority 5.
+table_add IngressPipeline.qos_classifier IngressPipeline.set_priority 0xb8&&&0xfc => 5 100
+
+# A direct route: destination prefix => next-hop MAC, router MAC, port.
+table_add IngressPipeline.ipv4_lpm IngressPipeline.set_route 10.0.1.0/24 => 0x000000000101 0x00000000aa01 1
+
+# An ECMP route with two member indices: 0 and 1.
+table_add IngressPipeline.ipv4_lpm IngressPipeline.select_ecmp 10.0.2.0/24 => 1 2
+table_add IngressPipeline.ecmp_nhop IngressPipeline.set_ecmp_nhop 1 0 => 0x000000000202 0x00000000aa02 2
+table_add IngressPipeline.ecmp_nhop IngressPipeline.set_ecmp_nhop 1 1 => 0x000000000303 0x00000000aa03 3
+
+# L2 unicast and broadcast-group selection.
+table_add IngressPipeline.l2_forward IngressPipeline.forward_l2 0x000000000101 => 1
+table_add IngressPipeline.l2_forward IngressPipeline.multicast 0xffffffffffff => 100
+
+# Rewrite VLAN PCP for packets classified at priority 5.
+table_add EgressPipeline.vlan_priority_rewrite EgressPipeline.rewrite_vlan_pcp 5 => 5

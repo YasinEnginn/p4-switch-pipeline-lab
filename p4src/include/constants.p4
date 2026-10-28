@@ -1,0 +1,14 @@
+#ifndef P4_SWITCH_PIPELINE_CONSTANTS_P4
+#define P4_SWITCH_PIPELINE_CONSTANTS_P4
+
+const bit<16> ETHERTYPE_IPV4 = 0x0800;
+const bit<16> ETHERTYPE_ARP  = 0x0806;
+const bit<16> ETHERTYPE_VLAN = 0x8100;
+
+const bit<8> IP_PROTOCOL_ICMP = 1;
+const bit<8> IP_PROTOCOL_TCP  = 6;
+const bit<8> IP_PROTOCOL_UDP  = 17;
+
+const bit<32> PORT_COUNTER_SIZE = 512;
+
+#endif
